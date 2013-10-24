@@ -31,8 +31,8 @@ var JUnitReporter = function(baseReporterDecorator, config, emitter, logger, hel
       .replace(/\'/g, "&apos;");
   }
 
-  function writeToFile(out, outputFile, suite) {
-    helper.mkdirIfNotExists(out, function() {
+  function writeToFile(outputDir, outputFile, suite) {
+    helper.mkdirIfNotExists(outputDir, function() {
 
       fs.writeFile(outputFile, suite.end({pretty: true}), function(err) {
         if (err) {
@@ -51,18 +51,9 @@ var JUnitReporter = function(baseReporterDecorator, config, emitter, logger, hel
   this.onRunStart = function(browsers) {
     suites = {};
 
-    var suite;
     var timestamp = (new Date()).toISOString().substr(0, 19);
     browsers.forEach(function(browser) {
-
-      // pendingFileWritings++;
       suites[browser.id] = {};
-      // suite = suites[browser.id] = builder.create('testsuite');
-      // suite.att('name', pkgName ? pkgName + ' / ' + browser.name : browser.name)
-      //      .att('timestamp', timestamp)
-      //      .att('hostname', os.hostname());
-      // suite.ele('properties')
-      //      .ele('property', {name: 'browser.fullName', value: browser.fullName});
     });
   };
 
@@ -75,7 +66,6 @@ var JUnitReporter = function(baseReporterDecorator, config, emitter, logger, hel
       if(suitelist.hasOwnProperty(prop)){
         var suite = suitelist[prop];
         var node = suite.node;
-        // var outputFile = out + '/' + 'TEST-' + prop.replace(/ /g, '_') + '.xml';
         var outputFile = outputDir + 'TEST-' + browser.name.replace(/ /g, '_') + '-' + suite.name.replace(/ /g, '_') + '.xml';
         node.att('tests', suite.total);
         node.att('errors', suite.error);
@@ -155,5 +145,5 @@ JUnitReporter.$inject = ['baseReporterDecorator', 'config.junitReporter', 'emitt
 
 // PUBLISH DI MODULE
 module.exports = {
-  'reporter:adnjunit': ['type', JUnitReporter]
+  'reporter:junit': ['type', JUnitReporter]
 };
