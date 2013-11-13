@@ -145,5 +145,5 @@ JUnitReporter.$inject = ['baseReporterDecorator', 'config.junitReporter', 'emitt
 
 // PUBLISH DI MODULE
 module.exports = {
-  'reporter:junit': ['type', JUnitReporter]
+  'reporter:adnjunit': ['type', JUnitReporter]
 };
